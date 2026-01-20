@@ -1,0 +1,37 @@
+# Configuración de Python para MODELOS_MA
+.venv/
+venv/
+ENV/
+env/
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Datos descargados
+data/
+*.csv
+*.xlsx
+
+# Logs
+*.log
+
+# Archivos temporales de Streamlit
+.streamlit/
