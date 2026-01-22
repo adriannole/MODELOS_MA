@@ -1,18 +1,34 @@
 # Modelos MA (Moving Average) - Series de Tiempo
+## Análisis y Predicción del Turismo en Ecuador
 
-Aplicación profesional para análisis y predicción de series temporales usando modelos MA (Moving Average) con datos reales.
+Aplicación profesional de Streamlit para análisis de series temporales usando modelos **MA (Moving Average)** con **datos REALES** del Ministerio de Turismo de Ecuador.
+
+## 📊 Datos REALES Incluidos
+
+- **Fuente**: INEC / Ministerio de Turismo Ecuador
+- **Archivo**: `turismo_ecuador.csv`
+- **Período**: Enero 2008 - Diciembre 2024
+- **Frecuencia**: Mensual  
+- **Variable**: Llegadas de turistas internacionales (miles)
+- **Observaciones**: 204 datos históricos reales
+
+Datos incluyen:
+- ✅ Crecimiento 2008-2019 (85k → 182k turistas/mes)
+- ✅ Caída COVID-19 en 2020 (-95%)
+- ✅ Recuperación 2021-2024
 
 ## Características
 
 ### 📊 Análisis Completo
-- Implementación de modelos MA(q) de cualquier orden
+- Modelos MA(q) de orden configurable (1-10)
 - Análisis de estacionariedad (ACF y PACF)
 - Diagnóstico completo de residuales
 - Tests estadísticos (Ljung-Box, Jarque-Bera)
 
-### 📈 Datos Reales
-- **Datos Financieros**: Integración con Yahoo Finance para obtener precios de acciones en tiempo real
-- **Datos Económicos**: Datasets de ventas, temperatura y producción industrial
+### 📈 Fuentes de Datos
+- **Datos Reales CSV**: Turismo Ecuador (INEC/Ministerio)
+- **Financieros**: Yahoo Finance para acciones en tiempo real
+- **Sintéticos**: Datasets para demostración
 
 ### 🎯 Visualizaciones Profesionales
 - Serie temporal original

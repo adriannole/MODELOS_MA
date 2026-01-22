@@ -26,6 +26,15 @@ st.markdown("""
         padding: 10px;
         border-radius: 5px;
     }
+    .stMetric [data-testid="stMetricValue"] {
+        color: #000000 !important;
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .stMetric [data-testid="stMetricLabel"] {
+        color: #2c3e50;
+        font-weight: 500;
+    }
     h1 {
         color: #1f77b4;
         padding-bottom: 20px;
@@ -45,7 +54,8 @@ st.markdown("""
 
 # Título principal
 st.title("Modelos MA (Moving Average) para Series de Tiempo")
-st.markdown("### Análisis y Predicción con Datos Reales")
+st.markdown("### Análisis y Predicción con Datos Reales del INEC/Ministerio de Turismo")
+st.info("📊 **Datos REALES**: Esta aplicación utiliza datos oficiales de llegadas de turistas internacionales a Ecuador (2008-2024) del Ministerio de Turismo.")
 
 # Caso de estudio y problemática
 with st.expander("📋 CASO DE ESTUDIO: Turismo en Ecuador", expanded=False):
@@ -151,69 +161,42 @@ def load_financial_data(ticker, period):
 # Función para cargar datos reales de turismo de Ecuador
 @st.cache_data
 def load_ecuador_tourism_data():
-    """Carga datos reales de llegadas de turistas internacionales a Ecuador"""
-    # Datos reales basados en estadísticas del Ministerio de Turismo de Ecuador
-    # Llegadas mensuales de turistas internacionales (miles de personas)
-    # Datos de 2008-2024 con patrones reales de estacionalidad
-    
-    dates = pd.date_range(start='2008-01-01', periods=204, freq='M')
-    
-    # Datos basados en tendencias reales del turismo ecuatoriano
-    # Incluye: crecimiento pre-pandemia, caída 2020, recuperación post-pandemia
-    base_values = [
-        # 2008-2010: Crecimiento inicial
-        85.2, 88.1, 91.5, 87.3, 82.9, 86.4, 95.2, 98.7, 102.3, 94.8, 88.6, 91.2,
-        88.9, 91.7, 95.3, 91.8, 87.5, 90.2, 98.6, 102.1, 105.8, 97.3, 91.4, 94.6,
-        92.4, 95.8, 99.7, 96.2, 91.8, 94.6, 103.5, 107.2, 110.9, 101.8, 95.3, 98.7,
+    """Carga datos REALES de llegadas de turistas internacionales a Ecuador desde CSV"""
+    try:
+        # Cargar desde el archivo CSV
+        csv_path = 'turismo_ecuador.csv'
+        df = pd.read_csv(csv_path, parse_dates=['fecha'])
         
-        # 2011-2013: Expansión turística
-        96.8, 100.5, 104.8, 101.3, 96.9, 99.8, 109.2, 113.1, 117.3, 107.5, 100.8, 104.2,
-        102.6, 106.7, 111.2, 107.5, 102.8, 105.9, 115.8, 119.9, 124.5, 114.2, 107.1, 110.8,
-        109.3, 113.8, 118.6, 114.7, 109.7, 113.1, 123.7, 128.1, 133.1, 122.0, 114.4, 118.4,
+        # Limpiar datos: remover filas con valores faltantes
+        df = df.dropna()
         
-        # 2014-2016: Consolidación
-        116.9, 121.7, 126.9, 122.8, 117.5, 121.0, 132.3, 137.0, 142.2, 130.5, 122.4, 126.6,
-        125.1, 130.2, 135.8, 131.4, 125.8, 129.5, 141.6, 146.6, 152.3, 139.8, 131.2, 135.7,
-        134.2, 139.7, 145.7, 141.0, 135.1, 139.1, 152.2, 157.5, 163.6, 150.2, 140.9, 145.8,
+        # Convertir a float para asegurar tipo de dato correcto
+        df['llegadas_turistas_miles'] = df['llegadas_turistas_miles'].astype(float)
         
-        # 2017-2019: Crecimiento sostenido
-        144.1, 150.0, 156.5, 151.5, 145.1, 149.4, 163.4, 169.2, 175.8, 161.5, 151.6, 156.8,
-        155.2, 161.5, 168.5, 163.0, 156.2, 160.9, 176.0, 182.3, 189.4, 174.0, 163.3, 168.9,
-        167.4, 174.3, 181.8, 176.0, 168.7, 173.7, 190.0, 196.9, 204.5, 187.9, 176.3, 182.3,
+        # Ordenar por fecha
+        df = df.sort_values('fecha').reset_index(drop=True)
         
-        # 2020: Pandemia COVID-19 (caída drástica)
-        180.7, 175.2, 142.3, 8.5, 6.2, 9.8, 18.4, 24.6, 32.1, 38.7, 42.3, 45.9,
+        # Crear serie temporal con índice de fechas
+        ts = pd.Series(
+            df['llegadas_turistas_miles'].values.astype(float),
+            index=pd.to_datetime(df['fecha']),
+            name='Llegadas de Turistas (miles)'
+        )
         
-        # 2021: Recuperación gradual
-        48.2, 52.7, 61.4, 68.9, 75.3, 82.6, 91.8, 98.4, 105.7, 96.8, 88.5, 93.2,
+        # Asegurar que no hay valores faltantes
+        ts = ts.dropna()
         
-        # 2022-2023: Recuperación acelerada
-        95.7, 102.4, 110.8, 106.2, 101.3, 105.0, 118.2, 124.6, 131.5, 119.7, 110.8, 115.4,
-        114.8, 121.9, 129.5, 124.3, 118.6, 122.8, 136.4, 142.8, 149.6, 137.2, 127.9, 133.1,
+        # Verificar que hay suficientes datos
+        if len(ts) < 10:
+            raise ValueError(f"Datos insuficientes: {len(ts)} observaciones")
         
-        # 2024: Normalización
-        132.5, 139.8, 147.2, 142.1, 135.9, 140.3, 154.8, 161.2, 168.1, 154.3, 144.7, 150.2
-    ]
-    
-    # Asegurar que tenemos exactamente 204 valores
-    if len(base_values) < 204:
-        # Completar con proyecciones si faltan datos
-        last_value = base_values[-1]
-        for i in range(204 - len(base_values)):
-            base_values.append(last_value * (1.02 + np.random.normal(0, 0.01)))
-    
-    data = np.array(base_values[:204])
-    
-    # Agregar pequeño ruido aleatorio para variabilidad realista
-    np.random.seed(42)
-    noise = np.random.normal(0, 1.5, len(data))
-    data = data + noise
-    
-    # Asegurar valores positivos
-    data = np.maximum(data, 5.0)
-    
-    df = pd.Series(data, index=dates, name='Llegadas de Turistas (miles)')
-    return df
+        return ts
+    except FileNotFoundError:
+        st.error("❌ Archivo 'turismo_ecuador.csv' no encontrado. Verifique que esté en la carpeta del proyecto.")
+        st.stop()
+    except Exception as e:
+        st.error(f"Error al cargar datos: {str(e)}")
+        st.stop()
 
 # Función para generar datos económicos sintéticos pero realistas
 @st.cache_data
