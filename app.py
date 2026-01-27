@@ -62,10 +62,10 @@ st.markdown("""
 # Título principal
 st.title("Modelos MA (Moving Average) para Series de Tiempo")
 st.markdown("### Análisis y Predicción con Datos Reales del INEC/Ministerio de Turismo")
-st.info("📊 **Datos REALES**: Esta aplicación utiliza datos oficiales del INEC y Ministerio de Turismo de Ecuador.")
+st.info(" **Datos REALES**: Esta aplicación utiliza datos oficiales del INEC y Ministerio de Turismo de Ecuador.")
 
 # Explicación del dataset y modelo MA
-with st.expander("📚 ¿Cómo funciona esta aplicación? - Explicación completa", expanded=False):
+with st.expander(" ¿Cómo funciona esta aplicación? - Explicación completa", expanded=False):
     st.markdown("""
     ##  Explicación del Dataset de Turismo Ecuador
     
@@ -365,7 +365,7 @@ with st.sidebar:
     
     model_type = st.radio(
         "Tipo de Modelo",
-        ["🎯 MA (Moving Average) - RECOMENDADO", "ARIMA (Avanzado)", "SARIMA (Avanzado)"],
+        [" MA (Moving Average) - RECOMENDADO", "ARIMA (Avanzado)", "SARIMA (Avanzado)"],
         index=0,
         help="MA es rápido y confiable para turismo"
     )
@@ -527,8 +527,8 @@ def fit_ma_model(data, model_order, seasonal_order=None):
         fitted_model = model.fit()
         return fitted_model
     except Exception as e:
-        st.error(f"❌ Error al ajustar el modelo: {str(e)}")
-        st.info("💡 Intenta recargar la página o usa parámetros más simples (q=1 o q=2 para MA).")
+        st.error(f" Error al ajustar el modelo: {str(e)}")
+        st.info(" Intenta recargar la página o usa parámetros más simples (q=1 o q=2 para MA).")
         st.stop()
 
 # Función para realizar diagnóstico del modelo
@@ -633,7 +633,7 @@ with st.spinner(f"Ajustando {model_type_clean}... (puede tomar 1-2 minutos)"):
         
         # Limpiar el mensaje de progreso
         progress_placeholder.empty()
-        st.success(f"✅ ¡Modelo {model_type_clean} ajustado exitosamente!")
+        st.success(f" ¡Modelo {model_type_clean} ajustado exitosamente!")
         
         # Mostrar resumen del modelo
         st.subheader("Resumen del Modelo")
@@ -959,7 +959,7 @@ with st.spinner(f"Ajustando {model_type_clean}... (puede tomar 1-2 minutos)"):
         
         # Ejemplo práctico de aplicación
         if data_source == "Datos Económicos (Dataset Incluido)" and dataset_option == "Turismo Ecuador":
-            st.header("8. 📊 Ejemplo Práctico: Aplicación al Turismo Ecuatoriano")
+            st.header("8.  Ejemplo Práctico: Aplicación al Turismo Ecuatoriano")
             
             # Calcular estadísticas clave
             pred_2026 = forecast_df[forecast_df.index.year == 2026] if isinstance(forecast_df.index[0], pd.Timestamp) else forecast_df.head(12)
@@ -1021,7 +1021,7 @@ with st.spinner(f"Ajustando {model_type_clean}... (puede tomar 1-2 minutos)"):
                 st.markdown("---")
                 
                 # Casos de uso práctico
-                tab1, tab2, tab3 = st.tabs(["🏛️ Ministerio de Turismo", "🏨 Sector Hotelero", "✈️ Aerolíneas"])
+                tab1, tab2, tab3 = st.tabs([" Ministerio de Turismo", " Sector Hotelero", " Aerolíneas"])
                 
                 with tab1:
                     st.subheader("Decisiones para el Ministerio de Turismo")
